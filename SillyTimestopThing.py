@@ -16,9 +16,9 @@ grid_size = 4
 rThreshold = 15
 avgTarget = (65, 65, 65)
 dThreshold = 4
-avgIncreaseThreshold = 10
+avgIncreaseThreshold = 6
 numIncreasesThreshold = 3
-avgColorThreshold = 155
+avgColorThreshold = 130
 camera = dxcam.create()
 
 debounce = False
@@ -27,14 +27,10 @@ lastAvg = 0
 increaseCount = 0
 
 def timestop():
-    os.startfile(r'C:\Users\hansa\Downloads\timestop.mov')
-    time.sleep(0.25)
-    user32 = ctypes.WinDLL('user32')
-    user32.ShowWindow(user32.GetForegroundWindow(), 3)
-    # bringToFG()
-    time.sleep(2.75)
-    subprocess.call("taskkill /f /im vlc.exe", shell=True)
     subprocess.call("taskkill /f /im RobloxPlayerBeta.exe", shell=True)
+    os.startfile(r'C:\Users\hansa\Downloads\timestop.mov')
+    time.sleep(3)
+    subprocess.call("taskkill /f /im vlc.exe", shell=True)
     time.sleep(5)
 
 def process_exists(process_name):
@@ -54,7 +50,7 @@ def isTimestopped():
         debounce = False
         return False
     # img = pyautogui.screenshot(region=(0, 23, 1920, 1017))
-    img = camera.grab(region=(0, 23, 1920, 1040))
+    img = camera.grab(region=(0, 0, 1920, 1080))
     if (not img is None and img.ndim > 0):
         avgColor = numpy.average(numpy.average(numpy.average(img, axis=0), axis=0), axis=0)
         # result = inRangeRGB(avgColor, avgTarget)
@@ -83,6 +79,9 @@ def isTimestopped():
 ##                return False
 ##    debounce = True
 ##    return True
+
+def bringWindowToFront(window_name):
+    pyautogui.getWindowsWithTitle(window_name)[0].maximize()
     
 def lowDeviation(color):
     colorMax = max(color)
